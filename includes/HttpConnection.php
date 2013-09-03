@@ -5,6 +5,8 @@
  * This file defines the classes used to make HTTP requests.
  */
 
+namespace Tuque;
+
 /**
  * HTTP Exception. This is thrown when a status code other then 2XX is returned.
  *
@@ -17,8 +19,7 @@
  *   The array containing: status, headers, and content of the HTTP request
  *   causing the error. This is only set if there was a HTTP response sent.
  */
-set_include_path("sites/all/libraries/tuque/");
-class HttpConnectionException extends Exception {
+class HttpConnectionException extends \Exception {
 
   protected $response;
 
@@ -511,7 +512,7 @@ class CurlConnection extends HttpConnection {
         $content_type=$options['mimeType'];
       }
     }
-    
+
     if ($content_type) {
       $headers = array("Content-Type: $content_type");
     }
@@ -663,11 +664,11 @@ class CurlConnection extends HttpConnection {
     }
     $this->unallocateCurlContext();
     $this->setupCurlContext($url);
-    
+
     if (isset($options['headers_only']) && $options['headers_only'] === TRUE) {
       curl_setopt(self::$curlContext, CURLOPT_NOBODY, TRUE);
       curl_setopt(self::$curlContext, CURLOPT_HEADER, TRUE);
-      
+
     } else {
       curl_setopt(self::$curlContext, CURLOPT_CUSTOMREQUEST, 'GET');
       curl_setopt(self::$curlContext, CURLOPT_HTTPGET, TRUE);
@@ -682,7 +683,7 @@ class CurlConnection extends HttpConnection {
       $file = NULL;
       //curl_setopt(self::$curlContext, CURLOPT_INFILE, STDIN);
     }
-    
+
     if (isset($options['headers'])) {
       curl_setopt(self::$curlContext, CURLOPT_HTTPHEADER, $options['headers']);
     }

@@ -47,7 +47,7 @@ class Api {
     }
 
     if (!$serializer) {
-      $serializer = new FedoraApiSerializer();
+      $serializer = new ApiSerializer();
     }
 
     $this->a = new FedoraApiA($connection, $serializer);
@@ -76,11 +76,11 @@ class FedoraApiA {
    * @param RepositoryConnection $connection
    *   Takes the Respository Connection object for the Respository this API
    *   should connect to.
-   * @param FedoraApiSerializer $serializer
+   * @param ApiSerializer $serializer
    *   Takes the serializer object to that will be used to serialze the XML
    *   Fedora returns.
    */
-  public function __construct(RepositoryConnection $connection, FedoraApiSerializer $serializer) {
+  public function __construct(RepositoryConnection $connection, ApiSerializer $serializer) {
     $this->connection = $connection;
     $this->serializer = $serializer;
   }
@@ -436,7 +436,7 @@ class FedoraApiA {
    *   Array
    *   (
    *       [objLabel] => Islandora strict PDF content model
-   *       [objOwnerId] => fedoraAdmin
+   *       [objOwnerId] => fedoraAdminnnn
    *       [objModels] => Array
    *           (
    *               [0] => info:fedora/fedora-system:ContentModel-3.0
@@ -596,11 +596,11 @@ class FedoraApiM {
    * @param RepositoryConnection $connection
    *   Takes the Respository Connection object for the Respository this API
    *   should connect to.
-   * @param FedoraApiSerializer $serializer
+   * @param ApiSerializer $serializer
    *   Takes the serializer object to that will be used to serialze the XML
    *   Fedora returns.
    */
-  public function __construct(RepositoryConnection $connection, FedoraApiSerializer $serializer) {
+  public function __construct(RepositoryConnection $connection, ApiSerializer $serializer) {
     $this->connection = $connection;
     $this->serializer = $serializer;
   }

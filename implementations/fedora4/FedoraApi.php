@@ -9,7 +9,7 @@
  * SOAP interface. If there are version specific modifications to be made for
  * Fedora, this is the place to make them.
  */
-set_include_path("sites/all/libraries/tuque/");
+
 require_once 'RepositoryException.php';
 require_once 'implementations/fedora3/FedoraApi.php';
 require_once 'implementations/fedora3/RepositoryConnection.php';
@@ -253,7 +253,7 @@ class Fedora4ApiA extends FedoraApiA {
         $url = $this->connection->buildUrl($request);
         $length = strlen($url) + 1;
         $dsid = substr($ds, $length);
-      
+
         $datastream = $apim->getDatastream($pid, $dsid,$params);
 
         $out[$dsid] = array(
@@ -324,9 +324,9 @@ class Fedora4ApiM extends FedoraApiM {
     $purgeurl = substr($result['content'], 0, $deletelenth);
     $result = $this->purgeObject($purgeurl, NULL, $params);
     //get propeties and get dc
-    $dcxml = "<oai_dc:dc xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\" 
-      xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" 
-      xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/oai_dc/ 
+    $dcxml = "<oai_dc:dc xmlns:oai_dc=\"http://www.openarchives.org/OAI/2.0/oai_dc/\"
+      xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+      xsi:schemaLocation=\"http://www.openarchives.org/OAI/2.0/oai_dc/
       http://www.openarchives.org/OAI/2.0/oai_dc.xsd\">";
     if ($title) {
       $dcxml.="<dc:title>$title</dc:title>\n";
@@ -525,7 +525,7 @@ class Fedora4ApiM extends FedoraApiM {
             $relationship[] = array($predicate => $value);
           }
         }
-        else if($values)
+        elseif($values)
         {
           $relationship[] = array($predicate => $values);
         }
@@ -626,7 +626,7 @@ class Fedora4ApiM extends FedoraApiM {
   }
 
   /**
-   * 
+   *
    * @return transaction ID
    */
   public function addTransaction() {
@@ -748,4 +748,3 @@ class Fedora4ApiM extends FedoraApiM {
   }
 
 }
-

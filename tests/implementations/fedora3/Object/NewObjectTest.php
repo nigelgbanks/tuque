@@ -1,6 +1,6 @@
 <?php
 
-require_once 'RepositoryFactory.php';
+require_once 'implementations/RepositoryFactory.php';
 require_once 'tests/implementations/ObjectTestBase.php';
 
 class NewObjectTest extends ObjectTestBase {
@@ -93,7 +93,7 @@ class NewObjectTest extends ObjectTestBase {
     $results = $xpath->query('/rdf:RDF/rdf:Description/@rdf:about');
     $this->assertEquals(2, $results->length);
 
-    foreach($results as $result) {
+    foreach ($results as $result) {
       $value = $result->value;
       $uri = explode('/', $value);
       $this->assertEquals($newid, $uri[1]);

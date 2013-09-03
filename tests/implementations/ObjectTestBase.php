@@ -1,6 +1,6 @@
 <?php
 
-require_once 'RepositoryFactory.php';
+require_once 'implementations/RepositoryFactory.php';
 require_once 'tests/TestHelpers.php';
 
 class ObjectTestBase extends PHPUnit_Framework_TestCase {

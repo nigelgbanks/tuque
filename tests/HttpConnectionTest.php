@@ -1,5 +1,5 @@
 <?php
-require_once "HttpConnection.php";
+require_once "includes/HttpConnection.php";
 
 class HttpConnectionTest extends PHPUnit_Framework_TestCase {
 

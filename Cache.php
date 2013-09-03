@@ -6,12 +6,14 @@
  * the native drupal cache.
  */
 
+namespace Tuque;
+
 /**
  * Simple abstract Cache defintion providing basic key value caching
  * functionality.
  */
-set_include_path("sites/all/libraries/tuque/");
 abstract class AbstractCache {
+
   /**
    * Add data to the cache.
    *
@@ -20,7 +22,7 @@ abstract class AbstractCache {
    * @param mixed $data
    *   The data to store with the key.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if the data was added to the cache. FALSE if $key already exists in
    *   the cache or if there was an error.
    */
@@ -49,7 +51,7 @@ abstract class AbstractCache {
    * @param mixed $data
    *   The data to store with the key.
    *
-   * @return boolean
+   * @return bool
    *   TRUE on success. FALSE on failure.
    */
   abstract public function set($key, $data);
@@ -60,7 +62,7 @@ abstract class AbstractCache {
    * @param string $key
    *   The key to delete.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if they key existed and was deleted. FALSE otherwise.
    */
   abstract public function delete($key);
@@ -83,14 +85,15 @@ class SimpleCache extends AbstractCache {
   protected static $size = SimpleCache::CACHESIZE;
 
   /**
-   * Set the cache size for the cache. If the size if bigger the cache size
-   * is just made bigger. If its smaller, the cache is flushed and the cache
-   * size is made smaller.
+   * Set the cache size for the cache.
+   *
+   * If the size if bigger the cache size is just made bigger. If its smaller,
+   * the cache is flushed and the cache size is made smaller.
    *
    * @param int $size
    *   The new size of the cache.
    */
-  static function setCacheSize($size) {
+  static public function setCacheSize($size) {
     if ($size > self::$size) {
       self::$size = $size;
     }
@@ -104,16 +107,18 @@ class SimpleCache extends AbstractCache {
   /**
    * Reset the cache flushing it and returning it to its default size.
    */
-  static function resetCache() {
+  static public  function resetCache() {
     self::$cache = array();
     self::$entries = array();
     self::$size = self::CACHESIZE;
   }
 
   /**
+   * Get the cached object.
+   *
    * @see AbstractCache::get
    */
-  function get($key) {
+  public function get($key) {
     if (array_key_exists($key, self::$cache)) {
       return self::$cache[$key];
     }
@@ -121,9 +126,11 @@ class SimpleCache extends AbstractCache {
   }
 
   /**
+   * Add an object to the cache.
+   *
    * @see AbstractCache::add
    */
-  function add($key, $data) {
+  public function add($key, $data) {
     if ($this->get($key) !== FALSE) {
       return FALSE;
     }
@@ -139,9 +146,11 @@ class SimpleCache extends AbstractCache {
   }
 
   /**
+   * Set the data for a cached object.
+   *
    * @see AbstractCache::set
    */
-  function set($key, $data) {
+  public function set($key, $data) {
     if ($this->add($key, $data) === FALSE) {
       self::$cache[$key] = $data;
     }
@@ -149,9 +158,11 @@ class SimpleCache extends AbstractCache {
   }
 
   /**
+   * Remove the object identified by $key from the cache.
+   *
    * @see AbstractCache::delete
    */
-  function delete($key) {
+  public function delete($key) {
     if (!array_key_exists($key, self::$cache)) {
       return FALSE;
     }
@@ -160,4 +171,5 @@ class SimpleCache extends AbstractCache {
     unset(self::$entries[$entrykey]);
     return TRUE;
   }
+
 }

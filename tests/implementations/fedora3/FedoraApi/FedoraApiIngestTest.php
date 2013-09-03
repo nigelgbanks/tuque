@@ -4,7 +4,7 @@
  * A set of test classes that test the implementations/fedora3/FedoraApi.php file
  */
 
-require_once 'RepositoryFactory.php';
+require_once 'implementations/RepositoryFactory.php';
 require_once 'tests/TestHelpers.php';
 
 class FedoraApiIngestTest extends PHPUnit_Framework_TestCase {

@@ -1,6 +1,8 @@
 <?php
-set_include_path("sites/all/libraries/tuque/");
-class FoxmlDocument extends DOMDocument {
+
+namespace Tuque\Fedora\v3;
+
+class FoxmlDocument extends \DOMDocument {
   const FOXML = 'info:fedora/fedora-system:def/foxml#';
   const xlink = 'http://www.w3.org/1999/xlink';
   const xsi = 'http://www.w3.org/2001/XMLSchema-instance';
@@ -14,7 +16,7 @@ class FoxmlDocument extends DOMDocument {
 
   protected $root;
 
-  public static function fromObject(AbstractObject $object) {
+  public static function fromObject(\Tuque\AbstractObject $object) {
     $foxml_document = new self();
     $foxml_document->createRootElementFromObject($object);
     $foxml_document->createDocumentFromObject($object);
@@ -37,7 +39,7 @@ class FoxmlDocument extends DOMDocument {
     $this->preserveWhiteSpace = FALSE;
   }
 
-  private function createRootElementFromObject(AbstractObject $object) {
+  private function createRootElementFromObject(\Tuque\AbstractObject $object) {
     $root = $this->createElementNS(self::FOXML, 'foxml:digitalObject');
     $root->setAttribute('VERSION', '1.1');
     $root->setAttribute('PID', "{$object->id}");
@@ -49,7 +51,7 @@ class FoxmlDocument extends DOMDocument {
     $this->root = $root;
   }
 
-  private function createDocumentFromObject(AbstractObject $object) {
+  private function createDocumentFromObject(\Tuque\AbstractObject $object) {
     // If DOMNodes are not appended in the corrected order root -> leaf,
     // namespaces may break... So be be cautious, add DOMNodes to their
     // parent element before adding child elements to them.
@@ -57,7 +59,7 @@ class FoxmlDocument extends DOMDocument {
     $this->createDocumentDatastreams($object);
   }
 
-  private function createObjectProperties(AbstractObject $object) {
+  private function createObjectProperties(\Tuque\AbstractObject $object) {
     $object_properties = $this->createElementNS(self::FOXML, 'foxml:objectProperties');
     $this->root->appendChild($object_properties);
 
@@ -144,7 +146,7 @@ class FoxmlDocument extends DOMDocument {
   /**
    * Passes each datastream to the appropriate ds create function.
    */
-  private function createDocumentDatastreams(AbstractObject $object) {
+  private function createDocumentDatastreams(\Tuque\AbstractObject $object) {
     foreach ($object as $ds) {
       switch ($ds->controlGroup) {
         case 'X':

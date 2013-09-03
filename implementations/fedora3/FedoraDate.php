@@ -4,8 +4,10 @@
  * specifically for the date format used in Fedora. This allows the easy
  * comparison of dates for example.
  */
-set_include_path("sites/all/libraries/tuque/");
-class FedoraDate extends DateTime {
+
+namespace Tuque\Fedora\v3;
+
+class FedoraDate extends \DateTime {
 
   /**
    * Get the date in a format that Fedora can use.
@@ -36,7 +38,7 @@ class FedoraDate extends DateTime {
     // operator because getting the timezone if its not set will actually
     // throw a warning. Ugh.
     date_default_timezone_set(@date_default_timezone_get());
-    parent::__construct($time, new DateTimeZone('UTC'));
+    parent::__construct($time, new \DateTimeZone('UTC'));
   }
 
   /**

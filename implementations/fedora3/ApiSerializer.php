@@ -5,11 +5,13 @@
  * something more easily dealt with in PHP.
  */
 
+namespace Tuque\Fedora\v3;
+
 /**
  * A class to Serialize the XML responses from Fedora into PHP arrays.
  */
-set_include_path("sites/all/libraries/tuque/");
-class FedoraApiSerializer {
+
+class ApiSerializer {
 
   /**
    * Simple function that takes an XML string and returns a SimpleXml object.
@@ -160,9 +162,9 @@ class FedoraApiSerializer {
   public function userAttributes($request) {
       $user_attributes = $this->loadSimpleXml($request['content']);
       $data = Array();
-      foreach($user_attributes->attribute as $attribute){
+      foreach ($user_attributes->attribute as $attribute) {
           $values = Array();
-          foreach($attribute->value as $value){
+          foreach ($attribute->value as $value) {
               array_push($values, (string)$value);
           }
           $data[(string)$attribute['name']] = $values;

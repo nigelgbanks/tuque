@@ -6,7 +6,10 @@
  * The essance of this file was taken from some commits that Adam Vessy made to
  * Islandora 6.x, so I'd like to give him some credit here.
  */
-set_include_path("sites/all/libraries/tuque/");
+
+namespace Tuque\Fedora\v3;
+use \SimpleXMLElement as SimpleXMLElement;
+
 class RepositoryQuery {
 
   public $connection;
@@ -98,7 +101,7 @@ class RepositoryQuery {
     if ($limit > 0) {
       $this->connection->addParam($url, $seperator, 'limit', $limit);
     }
-    
+
     $result = $this->connection->getRequest($url);
 
     // Pass the query's results off to a decent parser.

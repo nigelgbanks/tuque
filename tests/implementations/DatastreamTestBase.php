@@ -1,6 +1,6 @@
 <?php
 
-require_once 'RepositoryFactory.php';
+require_once 'implementations/RepositoryFactory.php';
 require_once 'tests/TestHelpers.php';
 
 class DatastreamTestBase extends PHPUnit_Framework_TestCase {
@@ -118,7 +118,7 @@ class DatastreamTestBase extends PHPUnit_Framework_TestCase {
       $this->ds->checksumType = $algorithm;
       $this->assertTrue(isset($this->ds->checksum));
       $this->assertTrue(isset($this->ds->checksumType));
-      switch($algorithm) {
+      switch ($algorithm) {
         case 'MD5':
           $algorithm = 'md5';
           break;
@@ -244,7 +244,7 @@ foo;
     $this->assertEquals('A', $this->ds[1]->state);
   }
 
-  public function testVersionsForEach() {
+  public function testVersionsForEach () {
     $this->assertEquals(1, count($this->ds));
     $this->assertEquals('A', $this->ds->state);
     $this->ds->state = 'D';
@@ -252,7 +252,7 @@ foo;
 
     $state = array(0 => 'D', 1 => 'A');
 
-    foreach($this->ds as $key => $version) {
+    foreach ($this->ds as $key => $version) {
       $this->assertEquals($state[$key], $version->state);
     }
   }

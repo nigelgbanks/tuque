@@ -5,7 +5,11 @@
  * This file defines the classes that are used for manipulaing the fedora
  * relationships datastreams.
  */
-set_include_path("sites/all/libraries/tuque/");
+
+namespace Tuque\Fedora\v3;
+use \DOMDocument as DOMDocument;
+use \DOMXPath as DOMXPath;
+
 define("XMLNS", "http://www.w3.org/2000/xmlns/");
 define('FEDORA_RELS_EXT_URI', 'info:fedora/fedora-system:def/relations-external#');
 define("FEDORA_MODEL_URI", 'info:fedora/fedora-system:def/model#');
@@ -22,8 +26,6 @@ define("RELS_TYPE_INT", 3);
 define("RELS_INT_NS", "http://www.w3.org/2001/XMLSchema#int");
 define("RELS_TYPE_DATETIME", 4);
 define("RELS_DATETIME_NS", "http://www.w3.org/2001/XMLSchema#dateTime");
-
-require_once "RepositoryException.php";
 
 /**
  * This is the base class for Fedora Relationships.

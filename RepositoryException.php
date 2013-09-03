@@ -5,11 +5,12 @@
  * Contains all of the exceptions thrown by Tuque.
  */
 
+namespace Tuque;
+
 /**
  * The top level exception for the Islandora Fedora API
  */
-set_include_path("sites/all/libraries/tuque/");
-class RepositoryException extends Exception {}
+class RepositoryException extends \Exception {}
 
 /**
  * This is thrown when there is an error parsing XML.

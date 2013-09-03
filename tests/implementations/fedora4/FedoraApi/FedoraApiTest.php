@@ -4,7 +4,7 @@
  * A set of test classes that test the implementations/fedora3/FedoraApi.php file
  */
 
-require_once 'RepositoryFactory.php';
+require_once 'implementations/RepositoryFactory.php';
 require_once 'tests/TestHelpers.php';
 
 class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
@@ -24,19 +24,19 @@ class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
     $profile['objItemIndexViewURL'] = parse_url($profile['objItemIndexViewURL'], PHP_URL_PATH);
     return $profile;
   }
-  
+
   protected function setUp() {
     $connection = new RepositoryConnection(new RepositoryConfig('http://localhost:8080/rest'));
     $serializer = new Fedora4ApiSerializer();
 
     $this->apim = new Fedora4ApiM($connection, $serializer);
     $this->apia = new Fedora4ApiA($connection, $serializer);
-    
+
     if (self::$purge == FALSE) {
       $this->fixtures = self::$saved;
       return;
     }
-    
+
     $this->namespace = 'test';
     //$this->namespace = FedoraTestHelpers::randomString(10);
     $pid1 = $this->namespace . ":" . FedoraTestHelpers::randomString(10);
@@ -280,7 +280,7 @@ class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
   // This one is interesting because the flattendocument function doesn't
   // work on it. So we have to handparse it. So we test to make sure its okay.
   // @todo Test the second arguement to this
-  
+
   function testGetObjectProfile() {
     foreach ($this->fixtures as $pid => $fixture) {
       $expected = $fixture['getObjectProfile'];
@@ -308,7 +308,7 @@ class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals($fixture['listDatastreams'][$date], $actual);
     }
   }
-  
+
   function testListDatastreamsWithTransaction() {
     $string1 = FedoraTestHelpers::randomString(10);
     $expected_pid = "test:$string1";
@@ -325,7 +325,7 @@ class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($expected_datastream, $datastreams);
     $this->apim->rollbackTransaction($txid);
   }
-  
+
   function testGetDatastream() {
     foreach ($this->fixtures as $pid => $fixture) {
       $listDatastreams = $fixture['listDatastreams'];
@@ -359,7 +359,7 @@ class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
       }
     }
   }
-  
+
   function testGetDatastreamWithTransaction()
   {
     $string1 = FedoraTestHelpers::randomString(10);
@@ -382,7 +382,7 @@ class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($expected_datastream, $datastream);
     $this->apim->rollbackTransaction($txid);
   }
-  
+
   function testAddRelationship(){
     $string1 = FedoraTestHelpers::randomString(10);
     $expected_pid = "test:$string1";
@@ -390,13 +390,13 @@ class FedoraApi4FindObjectsTest extends PHPUnit_Framework_TestCase {
     $actual_pid = $this->apim->ingest(array('pid' => "test:$string1", 'txID' => $txid));
     $predicate= FedoraTestHelpers::randomString(10);
     $object= FedoraTestHelpers::randomString(10);
-    $relationship = array('predicate'=>$predicate,'object'=>$object); 
+    $relationship = array('predicate'=>$predicate,'object'=>$object);
     $relationships= $this->apim->addRelationship($actual_pid,$relationship);
     $relationship_array=array(
       $predicate => "info:fedora/$object",
     );
     $this->assertContains($relationship_array,$relationships);
   }
-  
+
 
 }

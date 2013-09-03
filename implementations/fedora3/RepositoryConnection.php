@@ -3,10 +3,8 @@
  * @file
  * This file contains the implementation of a connection to Fedora.
  */
-set_include_path("sites/all/libraries/tuque/");
-require_once 'RepositoryConfigInterface.php';
-require_once 'HttpConnection.php';
-require_once 'RepositoryException.php';
+
+namespace Tuque\Fedora\v3;
 
 /**
  * Specific RepositoryConfig implementation that extends the CurlConnection
@@ -18,7 +16,7 @@ require_once 'RepositoryException.php';
  * fedora URL to. This makes is a bit easier to use. It also makes sure that
  * we always send usernames and passwords.
  */
-class RepositoryConnection extends CurlConnection {
+class RepositoryConnection extends \Tuque\CurlConnection {
 
   public $url;
   public $username;
@@ -34,7 +32,7 @@ class RepositoryConnection extends CurlConnection {
    * @param string $password
    *   The password to connect with.
    */
-  function __construct(RepositoryConfigInterface $config) {
+  function __construct(\Tuque\RepositoryConfig $config) {
 
     // Make sure the url doesn't have a trailing slash.
     $this->url = rtrim($config->url, "/");
@@ -44,7 +42,7 @@ class RepositoryConnection extends CurlConnection {
     try {
       parent::__construct();
     }
-    catch (HttpConnectionException $e) {
+    catch (\Tuque\HttpConnectionException $e) {
       throw new RepositoryException($e->getMessage(), $e->getCode(), $e);
     }
   }

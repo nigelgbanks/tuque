@@ -4,16 +4,20 @@
  * @file
  * This file contains all of the functionality for objects in the repository.
  */
-set_include_path("sites/all/libraries/tuque/");
-require_once 'AbstractObject.php';
-require_once 'implementations/fedora3/FedoraDate.php';
-require_once 'implementations/fedora3/Datastream.php';
-require_once 'implementations/fedora3/FedoraRelationships.php';
+
+namespace Tuque\Fedora\v3;
+use \Tuque\MagicProperty as MagicProperty;
+use \AbstractObject as AbstractObject;
+use \ArrayIterator as ArrayIterator;
+
+require_once 'FedoraDate.php';
+require_once 'Datastream.php';
+require_once 'Relationships.php';
 
 /**
  * This is the base class for a Fedora Object.
  */
-abstract class AbstractFedoraObject extends AbstractObject {
+abstract class AbstractFedoraObject extends MagicProperty implements AbstractObject {
 
   /**
    * This is an object for manipulating relationships related to this object.
@@ -22,7 +26,7 @@ abstract class AbstractFedoraObject extends AbstractObject {
   public $relationships;
   /**
    * The repository this object belongs to.
-   * @var FedoraRepository
+   * @var Repository
    */
   public $repository;
   /**
@@ -36,32 +40,11 @@ abstract class AbstractFedoraObject extends AbstractObject {
    * @see FedoraApiA::getObjectProfile
    */
   protected $objectProfile;
-  /**
-   * The name of the class that the Factory for FedoraDatastream should
-   * produce. This allows us to override the factory in inhereted classes.
-   *
-   * @var string
-   */
-  protected $fedoraDatastreamClass = 'FedoraDatastream';
-  /**
-   * The name of the class that the Factory for NewFedoraDatastream should
-   * produce. This allows us to override the factory in inhereted classes.
-   *
-   * @var string
-   */
-  protected $newFedoraDatastreamClass = 'NewFedoraDatastream';
-  /**
-   * The name of the class to use for RelsExt
-   *
-   * @var string
-   */
-  protected $fedoraRelsExtClass = 'FedoraRelsExt';
 
   /**
    * Constructosaurus.
    */
-  public function __construct($id, FedoraRepository $repository) {
-    parent::__construct();
+  public function __construct($id, Repository $repository) {
     $this->repository = $repository;
     $this->objectId = $id;
     $this->relationships = new FedoraRelsExt($this);
@@ -280,7 +263,7 @@ abstract class AbstractFedoraObject extends AbstractObject {
    * @see AbstractObject::constructDatastream()
    */
   public function constructDatastream($id, $control_group = 'M') {
-    return new $this->newFedoraDatastreamClass($id, $control_group, $this, $this->repository);
+    return new NewFedoraDatastream($id, $control_group, $this, $this->repository);
   }
 
 }
@@ -302,7 +285,7 @@ class NewFedoraObject extends AbstractFedoraObject {
   /**
    * Constructoman!
    */
-  public function __construct($id, FedoraRepository $repository) {
+  public function __construct($id, Repository $repository) {
     parent::__construct($id, $repository);
     $this->objectProfile = array();
     $this->objectProfile['objState'] = 'A';
@@ -351,7 +334,7 @@ class NewFedoraObject extends AbstractFedoraObject {
    * This is necessary to avoid the possibility of changing a datastream for
    * another object, when copying datastreams between objects.
    */
-  private function createNewDatastreamCopy(AbstractDatastream &$datastream) {
+  private function createNewDatastreamCopy(\Tuque\AbstractDatastream &$datastream) {
     $old_datastream = $datastream;
 
     $datastream = $this->constructDatastream($old_datastream->id, $old_datastream->controlGroup);
@@ -501,7 +484,7 @@ class FedoraObject extends AbstractFedoraObject {
   /**
    * The class constructor. Should be instantiated by the repository.
    */
-  public function __construct($id, FedoraRepository $repository) {
+  public function __construct($id, Repository $repository) {
     parent::__construct($id, $repository);
     $this->refresh();
   }
@@ -512,7 +495,6 @@ class FedoraObject extends AbstractFedoraObject {
    */
   public function refresh() {
     $this->objectProfile = $this->repository->api->a->getObjectProfile($this->id);
-    print_r( $this->objectProfile);
     $this->objectProfile['objCreateDate'] = new FedoraDate($this->objectProfile['objCreateDate']);
     $this->objectProfile['objLastModDate'] = new FedoraDate($this->objectProfile['objLastModDate']);
     $this->objectProfile['objLogMessage'] = '';
@@ -526,7 +508,7 @@ class FedoraObject extends AbstractFedoraObject {
       $datastreams = $this->repository->api->a->listDatastreams($this->id);
       $this->datastreams = array();
       foreach ($datastreams as $key => $value) {
-        $this->datastreams[$key] = new $this->fedoraDatastreamClass($key, $this, $this->repository, array("dsLabel" => $value['label'], "dsMIME" => $value['mimetype']));
+        $this->datastreams[$key] = new FedoraDatastream($key, $this, $this->repository, array("dsLabel" => $value['label'], "dsMIME" => $value['mimetype']));
       }
     }
   }
@@ -691,7 +673,7 @@ class FedoraObject extends AbstractFedoraObject {
       }
       $dsinfo = $this->repository->api->m->addDatastream($this->id, $ds->id, $type, $content, $params);
       unlink($temp);
-      $ds = new $this->fedoraDatastreamClass($ds->id, $this, $this->repository, $dsinfo);
+      $ds = new FedoraDatastream($ds->id, $this, $this->repository, $dsinfo);
       $this->datastreams[$ds->id] = $ds;
       return $ds;
     }

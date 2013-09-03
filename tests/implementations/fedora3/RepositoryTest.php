@@ -1,6 +1,6 @@
 <?php
 
-require_once 'RepositoryFactory.php';
+require_once 'implementations/RepositoryFactory.php';
 require_once 'tests/TestHelpers.php';
 require_once 'tests/implementations/RepositoryTestBase.php';
 

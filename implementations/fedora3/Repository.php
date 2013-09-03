@@ -4,11 +4,13 @@
  * This file defines an abstract repository that can be overridden and also
  * defines a concrete implementation for Fedora.
  */
-set_include_path("sites/all/libraries/tuque/");
-require_once "AbstractRepository.php";
-require_once "implementations/fedora3/RepositoryQuery.php";
-require_once "implementations/fedora3/FoxmlDocument.php";
-require_once "implementations/fedora3/Object.php";
+
+namespace Tuque\Fedora\v3;
+use \AbstractRepository as AbstractRepository;
+
+require_once "RepositoryQuery.php";
+require_once "FoxmlDocument.php";
+require_once "Object.php";
 
 /**
  * Concrete implementation of the AbstractRepository for Fedora.
@@ -18,7 +20,7 @@ require_once "implementations/fedora3/Object.php";
  *
  * @see AbstractRepository
  */
-class FedoraRepository extends AbstractRepository {
+class Repository implements AbstractRepository {
 
   /**
    * This is an instantiated AbstractCache that we use to make sure we aren't
@@ -37,23 +39,33 @@ class FedoraRepository extends AbstractRepository {
 
   public $api;
 
-  protected $queryClass = 'RepositoryQuery';
-  protected $newObjectClass = 'NewFedoraObject';
-  protected $objectClass = 'FedoraObject';
-
   /**
-   * Constructor for the FedoraRepository Object.
+   * Constructor for the Repository Object.
    *
-   * @param FedoraApi $api
+   * @param Api $api
    *   An instantiated FedoraAPI which will be used to connect to the
    *   repository.
    * @param AbstractCache $cache
    *   An instantiated AbstractCache which will be used to cache fedora objects.
    */
-  public function __construct(FedoraApi $api, AbstractCache $cache) {
+  public function __construct(Api $api, \Tuque\AbstractCache $cache) {
     $this->api = $api;
     $this->cache = $cache;
-    $this->ri = new $this->queryClass($this->api->connection);
+    $this->ri = new RepositoryQuery($this->api->connection);
+  }
+
+  /**
+   * Describes this repository.
+   *
+   * @see AbstractRepository::describe
+   */
+  public function describe() {
+    $info = $this->api->a->describeRepository();
+    // If we are able to successfully call API-M::getDatastream, assume we are
+    // an authenticated user, as API-M is usally locked down.
+    $dc = $this->api->m->getDatastream('fedora-system:ContentModel-3.0', 'DC');
+    $info['authenticated'] = $dc !== NULL;
+    return $info;
   }
 
   /**
@@ -77,7 +89,7 @@ class FedoraRepository extends AbstractRepository {
       $id = $this->getNextIdentifier($exploded_id[0], $create_uuid);
     }
     // If a full PID is provided we fall through to this.
-    return new $this->newObjectClass($id, $this);
+    return new NewFedoraObject($id, $this);
   }
 
   /**
@@ -174,7 +186,7 @@ class FedoraRepository extends AbstractRepository {
    * @see AbstractRepository::ingestObject()
    * @todo error handling
    */
-  public function ingestObject(AbstractObject &$object) {
+  public function ingestObject(\Tuque\AbstractObject &$object) {
     // We want all the managed datastreams to be uploaded.
     foreach ($object as $ds) {
       if ($ds->controlGroup == 'M') {
@@ -191,7 +203,7 @@ class FedoraRepository extends AbstractRepository {
     $dom = FoxmlDocument::fromObject($object);
     $xml = $dom->saveXml();
     $id = $this->api->m->ingest(array('string' => $xml, 'logMessage' => $object->logMessage));
-    $object = new $this->objectClass($id, $this);
+    $object = new FedoraObject($id, $this);
     $this->cache->set($id, $object);
     return $object;
   }
@@ -208,7 +220,7 @@ class FedoraRepository extends AbstractRepository {
     }
 
     try {
-      $object = new $this->objectClass($id, $this);
+      $object = new FedoraObject($id, $this);
       $this->cache->set($id, $object);
       return $object;
     }

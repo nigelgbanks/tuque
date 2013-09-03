@@ -5,6 +5,8 @@
  * This file contains the class MagicProperty
  */
 
+namespace Tuque;
+
 /**
  * This abstract class allows us to implement PHP magic properties by defining
  * a private method in the class that entends it. It attemtps to make the magic
@@ -20,7 +22,7 @@
  *   private $secret;
  *
  *   protected function myExampleMagicProperty($function, $value) {
- *     switch($function) {
+ *     switch ($function) {
  *       case 'set':
  *         $secret = $value;
  *         return;
@@ -39,7 +41,6 @@
  * print($test->myExample);
  * @endcode
  */
-set_include_path("sites/all/libraries/tuque/");
 abstract class MagicProperty {
 
   /**
