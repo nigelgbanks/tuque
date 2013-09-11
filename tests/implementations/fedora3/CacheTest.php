@@ -1,4 +1,6 @@
 <?php
+
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . "/../../../implementations/fedora3");
 require_once "Cache.php";
 
 class SimpleCacheTest extends PHPUnit_Framework_TestCase {
@@ -63,7 +65,7 @@ class SimpleCacheTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('awesomesauce', $result);
     return $cache;
   }
-  
+
   function testAddNull() {
     SimpleCache::resetCache();
     $cache = new SimpleCache();

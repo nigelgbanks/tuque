@@ -1,5 +1,6 @@
 <?php
 
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . "/../../../implementations/fedora3");
 require_once 'Datastream.php';
 require_once 'FedoraApi.php';
 require_once 'FedoraApiSerializer.php';
@@ -186,4 +187,3 @@ class CopyDatastreamTest extends PHPUnit_Framework_TestCase {
     }
   }
 }
-

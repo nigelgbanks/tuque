@@ -6,7 +6,7 @@ require_once 'Object.php';
 require_once 'Repository.php';
 require_once 'Cache.php';
 require_once 'TestHelpers.php';
-require_once 'tests/ObjectTest.php';
+require_once 'ObjectTest.php';
 
 class NewObjectTest extends ObjectTest {
 
@@ -100,7 +100,7 @@ class NewObjectTest extends ObjectTest {
     $results = $xpath->query('/rdf:RDF/rdf:Description/@rdf:about');
     $this->assertEquals(2, $results->length);
 
-    foreach($results as $result) {
+    foreach ($results as $result) {
       $value = $result->value;
       $uri = explode('/', $value);
       $this->assertEquals($newid, $uri[1]);
