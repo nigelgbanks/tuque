@@ -4,6 +4,7 @@
  * @file
  * Bootstrap code runs before any PHPUnit tests.
  */
+define('FEDORAVERSION', getenv('FEDORA_VERSION') ? getenv('FEDORA_VERSION') : '3.6.2');
 
 // Append the Tuque ROOT directory as the include path.
 define('TUQUE_ROOT', realpath(__DIR__ . '/..'));
