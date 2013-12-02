@@ -18,48 +18,6 @@ require_once 'FedoraDate.php';
 abstract class AbstractDatastream extends MagicProperty implements \AbstractDatastream {
 
   /**
-   * This will set the state of the datastream to deleted.
-   */
-  abstract public function delete();
-
-  /**
-   * Set the contents of the datastream from a file.
-   *
-   * @param string $file
-   *   The full path of the file to set to the contents of the datastream.
-   */
-  abstract public function setContentFromFile($file);
-
-  /**
-   * Set the contents of the datastream from a URL. The contents of this
-   * URL will be fetched, and the datastream will be updated to contain the
-   * contents of the URL.
-   *
-   * @param string $url
-   *   The full URL to fetch.
-   */
-  abstract public function setContentFromUrl($url);
-
-  /**
-   * Set the contents of the datastream from a string.
-   *
-   * @param string $string
-   *   The string whose contents will become the contents of the datastream.
-   */
-  abstract public function setContentFromString($string);
-
-  /**
-   * Get the contents of a datastream and output it to the file provided.
-   *
-   * @param string $file
-   *   The path of the file to output the contents of the datastream to.
-   *
-   * @return
-   *   TRUE on success or FALSE on failure.
-   */
-  abstract public function getContent($file);
-
-  /**
    * The identifier of the datastream. This is a read-only property.
    *
    * @var string

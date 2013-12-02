@@ -95,54 +95,6 @@ abstract class AbstractObject extends MagicProperty implements \AbstractObject {
   public $models;
 
   /**
-   * Set the state of the object to deleted.
-   */
-  abstract public function delete();
-
-  /**
-   * Get a datastream from the object.
-   *
-   * @param string $id
-   *   The id of the datastream to retreve.
-   *
-   * @return AbstractDatastream
-   *   Returns FALSE if the datastream could not be found. Otherwise it return
-   *   an instantiated Datastream object.
-   */
-  abstract public function getDatastream($id);
-
-  /**
-   * Purges a datastream.
-   *
-   * @param string $id
-   *   The id of the datastream to purge.
-   *
-   * @return boolean
-   *   TRUE on success. FALSE on failure.
-   */
-  abstract public function purgeDatastream($id);
-
-  /**
-   * Factory to create new datastream objects. Creates a new datastream object,
-   * this object is not ingested into the repository until you call
-   * ingestDatastream.
-   *
-   * @param string $id
-   *   The identifier of the new datastream.
-   * @param string $control_group
-   *   The control group the new datastream will be created in.
-   *
-   * @return AbstractDatastream
-   *   Returns an instantiated Datastream object.
-   */
-  abstract public function constructDatastream($id, $control_group = 'M');
-
-  /**
-   * Ingests a datastream object into the repository.
-   */
-  abstract public function ingestDatastream(&$ds);
-
-  /**
    * Unsets public members.
    *
    * We only define the public members of the object for Doxygen, they aren't actually accessed or used,
